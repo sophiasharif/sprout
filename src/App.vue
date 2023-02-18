@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
-    <KnowledgeGraph/>
     <InputForm/>
+    <KnowledgeGraph/>
   </div>
 </template>
 
@@ -25,5 +25,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+#wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  place-items: center;
 }
 </style>
