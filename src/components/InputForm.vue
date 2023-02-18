@@ -36,52 +36,83 @@
 import { useStore } from "@/pinia/store";
 export default {
   data() {
-      return {
-        id: "",
-        prereqs: "",
-        link: "",
-        mastery: "",
-        store: useStore(),
-      };
-    },
+    return {
+      id: "",
+      prereqs: "",
+      link: "",
+      mastery: null,
+      store: useStore(),
+    };
+  },
   methods: {
     addNode() {
+      if (!this.id || !this.prereqs || this.mastery == null) {
+        console.log(this.id, this.prereqs, this.mastery)
 
-        if (!this.id || !this.prereqs || !this.mastery) {
-          alert("Please input information for topic, prerequisites, and mastery level ");
-          return;
+        alert(
+          "Please input information for topic, prerequisites, and mastery level "
+        );
+        return;
+      }
+
+      if (this.mastery > 1 || this.mastery < 0) {
+        alert(
+          "Please enter a mastery level that is greater than zero and less than one"
+        );
+        return;
+      }
+
+      const newNode = {
+        id: this.id,
+        prereqs: this.prereqs,
+        link: this.link,
+        mastery: this.mastery,
+      };
+      var prereqsArray = this.prereqs.split(", ");
+      for (let i=0; i < prereqsArray.length; i++) {
+        let p = prereqsArray[i]
+        let validPrereq = false;
+        for (let j = 0; j < this.store.data.nodes.length; j++) {
+            let topic = this.store.data.nodes[j]
+            if (p == topic.id) validPrereq = true;
         }
-
-        if (this.mastery > 1 || this.mastery < 0) {
-          alert("Please enter a mastery level that is greater than zero and less than one");
-          return;
+        if (!validPrereq) {
+            alert(
+          "Please make sure the prerequisites are a comma-separated list of existing topics (with exactly one space after each comma)."
+        );
+        return;
         }
+      }
+      if (this.link == "") {
+        this.store.data.nodes.push({
+          id: newNode.id,
+          mastery: newNode.mastery,
+          prerequisites: prereqsArray,
+          link: null,
+        });
+      } else {
+        this.store.data.nodes.push({
+          id: newNode.id,
+          mastery: newNode.mastery,
+          prerequisites: prereqsArray,
+          link: this.link,
+        });
+      }
 
-        const newNode = {
-                id: this.id,
-                prereqs: this.prereqs,
-                link: this.link,
-                mastery: this.mastery,
-            };
-            var prereqsArray = this.prereqs.split(',');
-            if (this.link == "") {
-              this.store.data.nodes.push({id: newNode.id, mastery: newNode.mastery, prerequisites: prereqsArray, link: null})
-            }
-            else {
-              this.store.data.nodes.push({id: newNode.id, mastery: newNode.mastery, prerequisites: prereqsArray, link: this.link})
-            }
-            
-            console.log({id: newNode.id, mastery: newNode.mastery, prerequisites: prereqsArray, link: null})
-            this.id = "",
-            this.prereqs = "",
-            this.link = "",
-            this.mastery=""
-
-        }
-  
-    }
-}
-    
+      console.log({
+        id: newNode.id,
+        mastery: newNode.mastery,
+        prerequisites: prereqsArray,
+        link: null,
+      });
+      (this.id = ""),
+      (this.prereqs = ""),
+        (this.link = ""),
+        (this.mastery = "");
+        this.$emit('rerenderGraph')
+    },
+  },
+};
 </script>
 
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
-    <InputForm/>
-    <KnowledgeGraph/>
+    <InputForm @rerenderGraph="rerenderGraph"/>
+    <KnowledgeGraph ref="graph"/>
   </div>
 </template>
 
@@ -15,6 +15,11 @@ export default {
   components: {
     KnowledgeGraph, InputForm
   },
+  methods: {
+    rerenderGraph() {
+      this.$refs.graph.renderGraph();
+    }
+  }
 }
 </script>
 

@@ -13,12 +13,7 @@
           }}
         </p>
         <p>Mastery: {{ selectedNode.mastery }}</p>
-        <iframe
-          width="525"
-          height="393"
-          :src="selectedNode.link"
-        >
-        </iframe>
+        <iframe width="525" height="393" :src="selectedNode.link"> </iframe>
       </div>
     </div>
     <div ref="graph"></div>
@@ -37,9 +32,13 @@ const masteryColors = [
   "#fdfd95",
   "#90EE90",
   "#005C29",
-  "#013220",
+  "#006400",
 ];
 function getColorFromMastery(mastery) {
+  if (mastery == 1) {
+    console.log(masteryColors[masteryColors.length - 1])
+    return masteryColors[masteryColors.length - 1];
+  }
   const index = Math.floor(mastery * masteryColors.length);
   const color = masteryColors[index];
   return color;
@@ -58,6 +57,7 @@ export default {
   },
   methods: {
     renderGraph() {
+      d3.select("svg").remove();
       this.loopThruPrereqs();
       const svg = d3
         .select(this.$refs.graph)
