@@ -2,18 +2,20 @@
   <div id="wrapper">
     <InputForm @rerenderGraph="rerenderGraph"/>
     <KnowledgeGraph ref="graph"/>
+    <PathToImprove id="path"/>
   </div>
 </template>
 
 <script>
 import KnowledgeGraph from './components/KnowledgeGraph.vue'
 import InputForm from './components/InputForm.vue'
+import PathToImprove from './components/PathToImprove.vue'
 
 
 export default {
   name: 'App',
   components: {
-    KnowledgeGraph, InputForm
+    KnowledgeGraph, InputForm, PathToImprove
   },
   methods: {
     rerenderGraph() {
@@ -35,5 +37,12 @@ export default {
   display: grid;
   grid-template-columns: 1fr 2fr;
   place-items: center;
+}
+#path {
+  grid-column: span 3;
+  width: 100%;
+}
+.subtitle p {
+  font-style: italic;
 }
 </style>
