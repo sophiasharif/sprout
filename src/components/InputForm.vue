@@ -1,9 +1,9 @@
 <template>
   <div id="wrapper">
-    <form @submit="onSubmit" class="add-form">
+    <form class="add-form">
       <div class="form-control">
         <label> Topic </label>
-        <input type="text" v-model="text" name="text" placeholder="Add Topic" />
+        <input type="text" v-model="id" name="id" placeholder="Add Topic" />
       </div>
       <div class="form-control">
         <label> Prerequisites </label>
@@ -21,7 +21,7 @@
       <div class="form-control">
         <label> Mastery Level </label>
         <input
-          type="float"
+          type="number"
           v-model="mastery"
           name="mastery"
           placeholder="Add Mastery Level"
@@ -35,51 +35,53 @@
 <script>
 import { useStore } from "@/pinia/store";
 export default {
-  methods: {
-    data() {
+  data() {
       return {
-        text: "",
+        id: "",
         prereqs: "",
         link: "",
         mastery: "",
         store: useStore(),
       };
     },
-
-    onsubmit(e) {
-      e.preventDefault();
-
-      if (!this.text || !this.prereqs || !this.link || !this.mastery) {
-        alert("Please fill out all sections ");
-        return;
-      }
-
-      const newNode = {
-        text: this.text,
-        prereqs: this.prereqs,
-        link: this.link,
-        mastery: this.mastery,
-      };
-      console.log(newNode);
-      (this.text = ""), (this.prereqs = "");
-      (this.link = ""), (this.mastery = "");
-    },
-
-    displayNodeData(node) {
-      this.selectedNode = node;
-      console.log(this.selectedNode);
-    },
+  methods: {
     addNode() {
-      // this.store.data.nodes.push({
-      //   id: "Test",
-      //   prerequisites: ["Thermodynamics", "Electromagnetism"],
-      // });
-      // d3.select("svg").remove();
-      // this.renderGraph();
-      console.log("hi");
-    },
-  },
-};
+
+        if (!this.id || !this.prereqs || !this.mastery) {
+          alert("Please input information for topic, prerequisites, and mastery level ");
+          return;
+        }
+
+        if (this.mastery > 1 || this.mastery < 0) {
+          alert("Please enter a mastery level that is greater than zero and less than one");
+          return;
+        }
+
+        const newNode = {
+                id: this.id,
+                prereqs: this.prereqs,
+                link: this.link,
+                mastery: this.mastery,
+            };
+            var prereqsArray = this.prereqs.split(',');
+            if (this.link == "") {
+              this.store.data.nodes.push({id: newNode.id, mastery: newNode.mastery, prerequisites: prereqsArray, link: null})
+            }
+            else {
+              this.store.data.nodes.push({id: newNode.id, mastery: newNode.mastery, prerequisites: prereqsArray, link: this.link})
+            }
+            
+            console.log({id: newNode.id, mastery: newNode.mastery, prerequisites: prereqsArray, link: null})
+            this.id = "",
+            this.prereqs = "",
+            this.link = "",
+            this.mastery=""
+
+        }
+  
+    }
+}
+    
 </script>
 
 <style scoped>
@@ -108,16 +110,15 @@ export default {
   letter-spacing: 1px;
   border-radius: 7px;
   padding: 5px;
-  background-color: rgb(0, 75, 137);
+  color: rgb(255, 255, 255);
   border: none;
-  box-shadow: 3px 5px rgb(65, 65, 65);
-  color: white;
+  background-color: rgb(16, 72, 118);
   font-weight: 800;
   transition: all 0.2s;
   margin-top: 18px;
 }
 #btn:hover {
-  box-shadow: 1px 2px rgb(65, 65, 65);
-  transform: translate(1px, 2px);
+  background-color: rgb(0, 0, 0);
+  color: white;
 }
 </style>
