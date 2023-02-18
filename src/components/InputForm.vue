@@ -15,6 +15,15 @@
         />
       </div>
       <div class="form-control">
+        <label> Category </label>
+        <input
+          type="text"
+          v-model="category"
+          name="category"
+          placeholder="Add Category"
+        />
+      </div>
+      <div class="form-control">
         <label> Link </label>
         <input type="text" v-model="link" name="link" placeholder="Add Link" />
       </div>
@@ -41,16 +50,21 @@ export default {
       prereqs: "",
       link: "",
       mastery: null,
+      category: "",
       store: useStore(),
     };
   },
   methods: {
     addNode() {
-      if (!this.id || !this.prereqs || this.mastery == null) {
-        console.log(this.id, this.prereqs, this.mastery)
-
+      if (!this.id ||this.mastery == null) {
         alert(
-          "Please input information for topic, prerequisites, and mastery level "
+          "Please input information for topic and mastery level "
+        );
+        return;
+      }
+      if (!this.prereqs && !this.category) {
+        alert(
+          "Please input information for either prerequisites or category"
         );
         return;
       }
@@ -67,14 +81,20 @@ export default {
         prereqs: this.prereqs,
         link: this.link,
         mastery: this.mastery,
+        category: this.category,
       };
       var prereqsArray = this.prereqs.split(", ");
+      
       for (let i=0; i < prereqsArray.length; i++) {
         let p = prereqsArray[i]
         let validPrereq = false;
         for (let j = 0; j < this.store.data.nodes.length; j++) {
             let topic = this.store.data.nodes[j]
             if (p == topic.id) validPrereq = true;
+        }
+        if (prereqsArray[0]=='' || prereqsArray[0]==""){
+          validPrereq = true;
+          prereqsArray = [];
         }
         if (!validPrereq) {
             alert(
@@ -83,6 +103,37 @@ export default {
         return;
         }
       }
+
+      var catArray = this.category.split(", ");
+      
+      for (let i=0; i < catArray.length; i++) {
+        let c = catArray[i]
+        let validCat = false;
+        for (let j = 0; j < this.store.data.nodes.length; j++) {
+            let topic = this.store.data.nodes[j]
+            if (c == topic.id) validCat = true;
+        }
+        if (catArray[0]=='' || catArray[0]==""){
+          validCat = true;
+        }
+        if (!validCat) {
+            alert(
+          "Please make sure the categories are a comma-separated list of existing topics (with exactly one space after each comma)."
+        );
+        return;
+        }
+
+        
+      }
+      for (let i=0; i<this.store.data.nodes.length; i+=1){
+            let dataNode = this.store.data.nodes[i];
+            for (let j=0; j<catArray.length; j+=1){
+              if (dataNode.id == catArray[j]){
+                dataNode.prerequisites.push(this.id)
+              }
+            }
+      }
+
       if (this.link == "") {
         this.store.data.nodes.push({
           id: newNode.id,
@@ -99,16 +150,13 @@ export default {
         });
       }
 
-      console.log({
-        id: newNode.id,
-        mastery: newNode.mastery,
-        prerequisites: prereqsArray,
-        link: null,
-      });
       (this.id = ""),
       (this.prereqs = ""),
         (this.link = ""),
+        (this.category = ""),
         (this.mastery = "");
+
+
         this.$emit('rerenderGraph')
     },
   },

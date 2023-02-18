@@ -12,11 +12,13 @@
               : "none"
           }}
         </p>
-        <p>Mastery: {{ selectedNode.mastery }}</p>
-        <iframe width="525" height="393" :src="selectedNode.link"> </iframe>
+        <p v-if="selectedNode.mastery>=0">Mastery: {{selectedNode.mastery}}</p>
+        <p v-else>Mastery: {{calculateMastery(selectedNode)}}</p>
+        <iframe v-if="selectedNode.mastery>=0" width="525" height="393" :src="selectedNode.link"> </iframe>
+        <p v-else> To get started on this project, generate a study plan below!</p>
       </div>
     </div>
-    <div ref="graph"></div>
+    <div id="graph-wrapper" ref="graph"></div>
   </div>
 </template>
 
@@ -26,15 +28,18 @@ import { useStore } from "@/pinia/store";
 
 const masteryColors = [
   "#D3D3D3",
-  "#ff6863",
-  "#ff964f",
-  "#ffb347",
-  "#fdfd95",
-  "#90EE90",
-  "#005C29",
-  "#006400",
+  "#eddc99",
+  "#d3e25c",
+  "#a9c648",
+  "#81aa35",
+  "#5b8e23",
+  "#347311",
+  "#005800",
 ];
 function getColorFromMastery(mastery) {
+  if (mastery == -1) {
+    return "#00008b";
+  }
   if (mastery == 1) {
     console.log(masteryColors[masteryColors.length - 1])
     return masteryColors[masteryColors.length - 1];
@@ -71,7 +76,7 @@ export default {
           "link",
           d3.forceLink(this.store.data.links).id((d) => d.id)
         )
-        .force("charge", d3.forceManyBody().strength(-5000)) // spread apart value
+        .force("charge", d3.forceManyBody().strength(-300)) // spread apart value
         .force("center", d3.forceCenter(500, 300)); // position center of graph
 
       const link = svg
@@ -138,6 +143,33 @@ export default {
       this.selectedNode = node;
       console.log(this.selectedNode);
     },
+    getNode(topicName) {
+     for (let i = 0; i < this.store.data.nodes.length; i++) {
+       const node = this.store.data.nodes[i];
+       if (node.id == topicName) {
+         return node;
+       }
+     }
+     alert("invalid topic name in getNode!");
+   },
+    calculateMastery(node) {
+      console.log("entered calculateMastery")
+      let rv = 0.0;
+      let count = 0;
+      for (let i=0; i<node.prerequisites.length; i+=1) {
+        let item = this.getNode(node.prerequisites[i]);
+        rv = rv + item.mastery;
+        count += 1;
+      }
+      
+      if (count == 0){
+        return 0;
+      }
+      console.log(1.0 * rv / count)
+      return (1.0 * rv / count).toFixed(2);
+    },
+    
+
   },
 };
 
@@ -199,5 +231,8 @@ span.close {
   right: 0;
   padding: 10px 20px;
   font-size: 30px;
+}
+#graph-wrapper{
+  border-left: 1px solid black;
 }
 </style>
