@@ -1,11 +1,28 @@
 <template>
   <div>
-    What topic/project would you like to improve on?
-    <input type="text" v-model="topicName" />
-    <button @click="createPlan">Generate Study Plan</button>
+    <div class="generate-plan">
+      <div class="form__group field">
+        <input
+          type="input"
+          v-model="topicName"
+          class="form__field"
+          placeholder="What project or topic would you like to improve on?"
+          name="name"
+          id="name"
+          required
+        />
+        <label for="name" class="form__label"
+          >What project or topic would you like to improve on?</label
+        >
+      </div>
+      <button @click="createPlan" class="button-63">Generate Study Plan</button>
+    </div>
     <div id="study-plan" v-if="displayPlan">
-      <div id="title">{{ title }} ({{ topicMastery }})</div>
-      <div class="col proficient-col">
+      <div id="title">
+        {{ title }}
+        <span v-if="topicMastery != '-100%'">({{ topicMastery }})</span>
+      </div>
+      <div class="col proficient-col" v-if="analysis.proficient.length">
         <h2>Your Strong Points</h2>
         <div class="subtitle">
           <p>
@@ -13,20 +30,28 @@
             studying other topics.
           </p>
         </div>
-        <TopicBreakdown  v-for="topic in analysis.proficient"  :key="topic.id + Math.random()" :topic="topic" />
+        <TopicBreakdown
+          v-for="topic in analysis.proficient"
+          :key="topic.id + Math.random()"
+          :topic="topic"
+        />
       </div>
-      <div class="col getting-there-col">
-        <h2>Brush up on these topics:</h2>
+      <div class="col getting-there-col" v-if="analysis.gettingThere.length">
+        <h2>Brush Up On These Topics</h2>
         <div class="subtitle">
           <p>
             You're on your way to mastering these topics - focus on studying the
             specific concepts you don't understand.
           </p>
         </div>
-        <TopicBreakdown  v-for="topic in analysis.gettingThere"  :key="topic.id + Math.random()" :topic="topic" />
+        <TopicBreakdown
+          v-for="topic in analysis.gettingThere"
+          :key="topic.id + Math.random()"
+          :topic="topic"
+        />
       </div>
-      <div class="col beginning-col">
-        <h2>Learn these concepts:</h2>
+      <div class="col beginning-col" v-if="analysis.beginning.length">
+        <h2>Learn These Concepts</h2>
         <div class="subtitle">
           <p>
             These are important concepts for mastering this topic, but you
@@ -34,7 +59,11 @@
             from the ground up.
           </p>
         </div>
-        <TopicBreakdown  v-for="topic in analysis.beginning"  :key="topic.id + Math.random()" :topic="topic" />
+        <TopicBreakdown
+          v-for="topic in analysis.beginning"
+          :key="topic.id + Math.random()"
+          :topic="topic"
+        />
       </div>
     </div>
   </div>
@@ -59,7 +88,7 @@ export default {
   components: { TopicBreakdown },
   data() {
     return {
-      topicName: "Electromagnetism",
+      topicName: "Create a Blog",
       title: "",
       displayPlan: false,
       store: useStore(),
@@ -96,8 +125,8 @@ export default {
     },
     getAnalysis() {
       let topic = this.getNode(this.topicName);
-      this.topicMastery = topic.mastery * 100 + '%'
-      this.topicColor = this.getColor(topic.mastery)
+      this.topicMastery = topic.mastery * 100 + "%";
+      this.topicColor = this.getColor(topic.mastery);
 
       let analysis = { proficient: [], gettingThere: [], beginning: [] };
 
@@ -136,25 +165,28 @@ export default {
       console.log(this.analysis);
     },
     getColor(mastery) {
-        return colors[Math.floor(colors.length*mastery)]
-    }
+      return colors[Math.floor(colors.length * mastery)];
+    },
   },
 };
 </script>
 
 <style scoped>
 h2 {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 .subtitle p {
-    margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 #study-plan {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto, 1fr);
+  justify-content: center;
+  padding: 2rem;
 }
 .col {
-    padding: .7rem;
+  padding: 0.7rem;
+  max-width: 550px;
 }
 #study-plan #title {
   grid-column: span 3;
@@ -164,4 +196,89 @@ h2 {
   text-decoration-color: v-bind(topicColor);
   text-decoration-thickness: 3px;
 }
+input {
+    text-align: center;
+}
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 50%;
+  margin-left: 25%;
+  margin-bottom: .5rem;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 60%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 1rem;
+  padding-top: 10px;
+  background: transparent;
+}
+
+.form__field::placeholder {
+  color: transparent;
+}
+
+.form__field::placeholder-shown ~ .form__label {
+  font-size: 1.3rem;
+  cursor: text;
+  top: 20px;
+}
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #9b9b9b;
+  margin-left: 25%;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image-slice: 1;
+}
+
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  font-size: 1rem;
+  color: #11998e;
+  font-weight: 700;
+}
+/* CSS */
+.button-63 {
+  align-items: center;
+  background-image: linear-gradient(144deg, #11998e,#38ef7d);
+  border: 0;
+  border-radius: 8px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  display: flex;
+  font-family: Phantomsans, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  justify-content: center;
+  line-height: .5em;
+  max-width: 100%;
+  padding: 19px 24px;
+  margin: 0 auto;
+  margin-top: 2rem;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
 </style>
