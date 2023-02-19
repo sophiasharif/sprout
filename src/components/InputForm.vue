@@ -1,44 +1,47 @@
 <template>
   <div class="sidebar">
-    <form class="add-form">
-      <div class="form-control">
-        <label> Topic </label>
-        <input type="text" v-model="id" name="id" placeholder="Add Topic" />
-      </div>
-      <div class="form-control">
-        <label> Prerequisites </label>
-        <input
-          type="text"
-          v-model="prereqs"
-          name="prereqs"
-          placeholder="Add Prerequisites"
-        />
-      </div>
-      <div class="form-control">
-        <label> Category </label>
-        <input
-          type="text"
-          v-model="category"
-          name="category"
-          placeholder="Add Category"
-        />
-      </div>
-      <div class="form-control">
-        <label> Link </label>
-        <input type="text" v-model="link" name="link" placeholder="Add Link" />
-      </div>
-      <div v-if="!isProject" class="form-control">
-        <label> Mastery Level </label>
-        <input
-          type="double"
-          v-model="mastery"
-          name="mastery"
-          placeholder="Add Mastery Level"
-        />
-      </div>
+    <div class="form-wrapper">
+      <h1 style="margin-bottom: 0px;"> Add a Node</h1>
       <input id="checkbox" type="checkbox" v-model="isProject"> Is this a project?
-      <button id="btn" @click.prevent="addNode">Add Node</button>
-    </form>
+      <form class="add-form">
+        <div style="margin-top: 20px;" class="form-control">
+          <label > Topic or Project </label>
+          <input type="text" v-model="id" name="id" placeholder="Add Topic" />
+        </div>
+        <div class="form-control">
+          <label> Prerequisites </label>
+          <input
+            type="text"
+            v-model="prereqs"
+            name="prereqs"
+            placeholder="Add Prerequisites"
+          />
+        </div>
+        <div v-if="!isProject" class="form-control">
+          <label> Category </label>
+          <input
+            type="text"
+            v-model="category"
+            name="category"
+            placeholder="Add Category"
+          />
+        </div>
+        <div v-if="!isProject" class="form-control">
+          <label> Link </label>
+          <input type="text" v-model="link" name="link" placeholder="Add Link" />
+        </div>
+        <div v-if="!isProject" class="form-control">
+          <label> Mastery Level </label>
+          <input
+            type="double"
+            v-model="mastery"
+            name="mastery"
+            placeholder="Add Mastery Level"
+          />
+        </div>
+        <button id="btn" @click.prevent="addNode">Add Node</button>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -60,6 +63,7 @@ export default {
     addNode() {
       if (this.isProject == true){
         this.mastery = -1;
+        this.link = "";
       }
       if (!this.id || this.mastery == null) {
         alert(
@@ -169,20 +173,24 @@ export default {
 </script>
 
 <style scoped>
-#sidebar {
-  width: 300px;
-  height: 500px;
-  display: flex;
-  justify-content: center;
+.sidebar {
+  width: 350px;
+  height: 100vh;
+  display: grid;
+  place-items: center;
 }
 .form-control {
   margin: 5px;
 }
 .form-control input {
   margin: 5px;
-  width: 100%;
+  display: block;
+  width: 250px;
   padding-top: 3px;
   padding-bottom: 3px;
+  border: none;
+  padding: 6px;
+  border-radius: 5px;
 }
 .form-control label {
   letter-spacing: 1px;
@@ -200,6 +208,7 @@ export default {
   font-weight: 800;
   transition: all 0.2s;
   margin-top: 18px;
+  border: none;
 }
 #btn:hover {
   background-color: rgb(0, 0, 0);
@@ -207,5 +216,6 @@ export default {
 }
 #checkbox{
   margin-top: 8px;
+  border: none;
 }
 </style>
