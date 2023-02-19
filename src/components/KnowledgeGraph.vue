@@ -13,7 +13,7 @@
           }}
         </p>
         <p v-if="selectedNode.mastery>=0">Mastery: {{selectedNode.mastery*100}}%</p>
-        <p v-else>Mastery: {{calculateMastery(selectedNode)}}</p>
+        <p v-else>Mastery: {{calculateMastery(selectedNode)*100}}%</p>
         <iframe v-if="selectedNode.mastery>=0" width="525" height="393" :src="selectedNode.link"> </iframe>
         <p v-else> To get started on this project, generate a study plan below!</p>
       </div>

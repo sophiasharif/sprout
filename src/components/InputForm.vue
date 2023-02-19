@@ -73,14 +73,14 @@ export default {
       }
       if (!this.prereqs && !this.category) {
         alert(
-          "Please input information for prerequisites, category, or both"
+          "Please input information for prerequisites, category, or both."
         );
         return;
       }
       console.log(this.mastery)
       if (!((this.mastery <= 1 && this.mastery >=0) || this.mastery==-1)) {
         alert(
-          "Please input information for prerequisites, category, or both"
+          "Please enter a valid mastery level between 0.0 and 1.0!"
         );
         return;
       }
@@ -164,7 +164,6 @@ export default {
         (this.link = ""),
         (this.category = ""),
         (this.mastery = "");
-
 
         this.$emit('rerenderGraph')
     },
