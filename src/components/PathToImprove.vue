@@ -15,55 +15,62 @@
           >What project or topic would you like to improve on?</label
         >
       </div>
-      <button @click="createPlan" class="button-63">Generate Study Plan</button>
+      <button @click="createPlan" class="button-63" href="study-plan">Generate Study Plan</button>
     </div>
-    <div id="study-plan" v-if="displayPlan">
-      <div id="title">
-        {{ title }}
-        <span v-if="topicMastery != '-100%'">({{ topicMastery }})</span>
-      </div>
-      <div class="col proficient-col" v-if="analysis.proficient.length">
-        <h2>Your Strong Points</h2>
-        <div class="subtitle">
-          <p>
-            Congrats, you've mastered these concepts! Your time is best spent
-            studying other topics.
-          </p>
+    <div class="feedback" v-if="displayPlan">
+      <hr style="margin: 0 3rem; margin-top: 3rem;">
+      <div id="study-plan">
+        <div id="title">
+          {{ title }}
+          <span v-if="topicMastery != '-100%'">({{ topicMastery }})</span>
         </div>
-        <TopicBreakdown
-          v-for="topic in analysis.proficient"
-          :key="topic.id + Math.random()"
-          :topic="topic"
-        />
-      </div>
-      <div class="col getting-there-col" v-if="analysis.gettingThere.length">
-        <h2>Brush Up On These Topics</h2>
-        <div class="subtitle">
-          <p>
-            You're on your way to mastering these topics - focus on studying the
-            specific concepts you don't understand.
-          </p>
+        <div class="col proficient-col" v-if="analysis.proficient.length">
+          <h3>Your Strong Points</h3>
+          <div class="subtitle">
+            <p>
+              Congrats, you've mastered these concepts! Your time is best spent
+              studying other topics.
+            </p>
+          </div>
+          <TopicBreakdown
+            v-for="topic in analysis.proficient"
+            :key="topic.id + Math.random()"
+            :topic="topic"
+          />
         </div>
-        <TopicBreakdown
-          v-for="topic in analysis.gettingThere"
-          :key="topic.id + Math.random()"
-          :topic="topic"
-        />
-      </div>
-      <div class="col beginning-col" v-if="analysis.beginning.length">
-        <h2>Learn These Concepts</h2>
-        <div class="subtitle">
-          <p>
-            These are important concepts for mastering this topic, but you
-            haven't studied them much yet. Devote some time to learning these
-            from the ground up.
-          </p>
+        <div class="col getting-there-col" v-if="analysis.gettingThere.length">
+          <h3>Brush Up On These Topics</h3>
+          <div class="subtitle">
+            <p>
+              You're on your way to mastering these topics - focus on studying the
+              specific concepts you don't understand.
+            </p>
+          </div>
+          <TopicBreakdown
+            v-for="topic in analysis.gettingThere"
+            :key="topic.id + Math.random()"
+            :topic="topic"
+          />
         </div>
-        <TopicBreakdown
-          v-for="topic in analysis.beginning"
-          :key="topic.id + Math.random()"
-          :topic="topic"
-        />
+        <div class="col beginning-col" v-if="analysis.beginning.length">
+          <h3>Learn These Concepts</h3>
+          <div class="subtitle">
+            <p>
+              These are important concepts for mastering this topic, but you
+              haven't studied them much yet. Devote some time to learning these
+              from the ground up.
+            </p>
+          </div>
+          <TopicBreakdown
+            v-for="topic in analysis.beginning"
+            :key="topic.id + Math.random()"
+            :topic="topic"
+          />
+        </div>
+      </div>
+      <hr style="margin: 0 3rem;">
+      <div class="course-plan">
+        <PersonalizedCourse :topicName="topicName" ref="courses"/>
       </div>
     </div>
   </div>
@@ -72,6 +79,7 @@
 <script>
 import { useStore } from "@/pinia/store";
 import TopicBreakdown from "./TopicBreakdown.vue";
+import PersonalizedCourse from "./PersonalizedCourse.vue";
 
 const colors = [
   "#D3D3D3",
@@ -85,16 +93,16 @@ const colors = [
 ];
 
 export default {
-  components: { TopicBreakdown },
+  components: { TopicBreakdown, PersonalizedCourse },
   data() {
     return {
-      topicName: "Create a Blog",
+      topicName: "",
       title: "",
       displayPlan: false,
       store: useStore(),
       analysis: null,
       topicMastery: 0,
-      topicColor: "#FF0000",
+      topicColor: "",
     };
   },
   methods: {
@@ -106,6 +114,8 @@ export default {
       this.title = this.topicName;
       this.displayPlan = true;
       this.getAnalysis();
+      this.$refs.courses.cStack = [];
+      this.$refs.courses.dfs(this.topicName)
     },
     isValidTopic(topicName) {
       for (let j = 0; j < this.store.data.nodes.length; j++) {
@@ -162,9 +172,9 @@ export default {
         }
       }
       this.analysis = analysis;
-      console.log(this.analysis);
     },
     getColor(mastery) {
+      if (mastery == -1) return "rgb(0, 0, 139)"
       return colors[Math.floor(colors.length * mastery)];
     },
   },
@@ -182,7 +192,7 @@ h2 {
   display: grid;
   grid-template-columns: repeat(auto, 1fr);
   justify-content: center;
-  padding: 2rem;
+  padding: 1rem 3rem 1rem 3rem;
 }
 .col {
   padding: 0.7rem;

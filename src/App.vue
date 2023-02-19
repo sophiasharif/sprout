@@ -11,7 +11,6 @@ import KnowledgeGraph from './components/KnowledgeGraph.vue'
 import InputForm from './components/InputForm.vue'
 import PathToImprove from './components/PathToImprove.vue'
 
-
 export default {
   name: 'App',
   components: {
