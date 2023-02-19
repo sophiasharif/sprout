@@ -80,17 +80,7 @@
 import { useStore } from "@/pinia/store";
 import TopicBreakdown from "./TopicBreakdown.vue";
 import PersonalizedCourse from "./PersonalizedCourse.vue";
-
-const colors = [
-  "#D3D3D3",
-  "#eddc99",
-  "#d3e25c",
-  "#a9c648",
-  "#81aa35",
-  "#5b8e23",
-  "#347311",
-  "#005800",
-];
+import { masteryColors, projectBlue } from "@/helpers";
 
 export default {
   components: { TopicBreakdown, PersonalizedCourse },
@@ -174,8 +164,8 @@ export default {
       this.analysis = analysis;
     },
     getColor(mastery) {
-      if (mastery == -1) return "rgb(0, 0, 139)"
-      return colors[Math.floor(colors.length * mastery)];
+      if (mastery == -1) return projectBlue;
+      return masteryColors[Math.floor(masteryColors.length * mastery)];
     },
   },
 };
@@ -208,6 +198,7 @@ h2 {
 }
 input {
     text-align: center;
+    color: #fff;
 }
 .form__group {
   position: relative;
@@ -222,7 +213,7 @@ input {
   font-family: inherit;
   width: 60%;
   border: 0;
-  border-bottom: 2px solid #9b9b9b;
+  border-bottom: 2px solid #d8d8d8;
   outline: 0;
   font-size: 1rem;
   padding-top: 10px;

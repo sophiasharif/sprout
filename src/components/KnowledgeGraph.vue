@@ -25,20 +25,11 @@
 <script>
 import * as d3 from "d3";
 import { useStore } from "@/pinia/store";
+import { masteryColors, projectBlue } from "@/helpers";
 
-const masteryColors = [
-  "#D3D3D3",
-  "#eddc99",
-  "#d3e25c",
-  "#a9c648",
-  "#81aa35",
-  "#5b8e23",
-  "#347311",
-  "#005800",
-];
 function getColorFromMastery(mastery) {
   if (mastery == -1) {
-    return "#00008b";
+    return projectBlue;
   }
   if (mastery == 1) {
     console.log(masteryColors[masteryColors.length - 1])
@@ -62,13 +53,16 @@ export default {
   },
   methods: {
     renderGraph() {
+
+      const width = window.innerWidth;
+
       d3.select("svg").remove();
       this.loopThruPrereqs();
       const svg = d3
         .select(this.$refs.graph)
         .append("svg")
-        .attr("width", 1000)
-        .attr("height", 600);
+        .attr("width", width)
+        .attr("height", 600)
 
       const simulation = d3
         .forceSimulation(this.store.data.nodes)
@@ -77,7 +71,7 @@ export default {
           d3.forceLink(this.store.data.links).id((d) => d.id)
         )
         .force("charge", d3.forceManyBody().strength(-300)) // spread apart value
-        .force("center", d3.forceCenter(500, 300)); // position center of graph
+        .force("center", d3.forceCenter(width/2, 300)); // position center of graph
 
       const link = svg
         .append("g")
@@ -85,7 +79,7 @@ export default {
         .data(this.store.data.links)
         .enter()
         .append("line")
-        .attr("stroke", "#999")
+        .attr("stroke", "#fff")
         .attr("stroke-opacity", 0.6)
         .attr("stroke-width", (d) => Math.sqrt(d.value));
 
@@ -108,6 +102,8 @@ export default {
         .text((d) => d.id)
         .attr("dx", 12)
         .attr("dy", 4)
+        .attr("fill", "#fff")
+        .attr("fill-width", ".5")
         .on("click", (event, node) => {
           this.displayNodeData(node);
         });
@@ -212,7 +208,7 @@ svg {
   max-width: 100%;
   height: 600px;
   max-height: 100%;
-  background: white;
+  background: #5b4b72;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   z-index: 3;
@@ -232,8 +228,5 @@ span.close {
   right: 0;
   padding: 10px 20px;
   font-size: 30px;
-}
-#graph-wrapper{
-  border-left: 1px solid black;
 }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <img src="./assets/sprout-logo2.png" id="hero-title">
   <div id="wrapper">
     <div @click="toggleForm" :class="{ active: formActive }" id="toggle-button">
       &#9654;
@@ -48,12 +49,22 @@ export default {
 </script>
 
 <style>
+html {
+  background: #332940;
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #fff;
+}
+#hero-title {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 2rem 1rem;
+  height: 60px;
 }
 #wrapper {
   display: grid;
@@ -72,7 +83,7 @@ export default {
   transition: all 0.5s ease;
   background-color: #fff;
   height: 100vh;
-  background: #38ef7d;
+  background: #14542d;
 }
 
 #toggle-button {

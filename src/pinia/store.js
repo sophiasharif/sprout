@@ -6,7 +6,7 @@ export const useStore = defineStore("store", {
       data: {
         nodes: [
           {
-            id: "Create a Blog",
+            id: "Blog",
             mastery: -1,
             prerequisites: ["HTML", "CSS", "Javascript", "Firebase"],
             link: "",
@@ -15,12 +15,12 @@ export const useStore = defineStore("store", {
           {
             id: "HTML",
             mastery: 0.9,
-            prerequisites: ["Tags", "Inheritance Structure", "Forms & Validations"],
+            prerequisites: ["Tags", "Inheritance", "Forms"],
             link: "https://www.youtube.com/embed/XiQ9rjaa2Ow"
           },
           { id: "Tags", mastery: 1.0, prerequisites: [], link: "https://www.youtube.com/embed/tv6bxtCjqDI"},
-          { id: "Inheritance Structure", mastery: 0.8, prerequisites: [], link: "https://www.youtube.com/embed/6KcIH9b5ycw" },
-          { id: "Forms & Validations", mastery: 0.1, prerequisites: [], link: "https://www.youtube.com/embed/eUkDdEwUgjs" },
+          { id: "Inheritance", mastery: 0.8, prerequisites: [], link: "https://www.youtube.com/embed/6KcIH9b5ycw" },
+          { id: "Forms", mastery: 0.1, prerequisites: [], link: "https://www.youtube.com/embed/eUkDdEwUgjs" },
           {
             id: "CSS",
             mastery: 0.6,
@@ -35,14 +35,14 @@ export const useStore = defineStore("store", {
           {
             id: "Javascript",
             mastery: 0.3,
-            prerequisites: ["DOM Manipulation", "Fetch API"],
+            prerequisites: ["DOM", "Fetch API"],
             link: "https://www.youtube.com/embed/hdI2bqOjy3c"
           },
-          { id: "DOM Manipulation", mastery: 0.2, prerequisites: [], link: "https://www.youtube.com/embed/y17RuWkWdn8" },
+          { id: "DOM", mastery: 0.2, prerequisites: [], link: "https://www.youtube.com/embed/y17RuWkWdn8" },
           { id: "Fetch API", mastery: 0.0, prerequisites: [], link: "https://www.youtube.com/embed/drK6mdA9d_M" },
           
           {
-            id: "Prepare for Technical Interview",
+            id: "Tech Interview",
             mastery: -1,
             prerequisites: ["Javascript", "Data Structures"],
             link: "",

@@ -30,6 +30,7 @@ export default {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-color: #514167;
     max-width: 400px;
  }
 p.subtitle {

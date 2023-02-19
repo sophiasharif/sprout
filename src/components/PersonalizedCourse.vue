@@ -68,4 +68,7 @@ export default {
   gap: 2rem;
   padding: 1rem 4rem;
 }
+h2 {
+    margin-top: 3rem;
+}
 </style>

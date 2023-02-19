@@ -204,14 +204,14 @@ export default {
   padding: 5px;
   color: rgb(255, 255, 255);
   border: none;
-  background-color: rgb(16, 72, 118);
+  background-color: #11998e;
   font-weight: 800;
-  transition: all 0.2s;
+  transition: all 0.5s;
   margin-top: 18px;
   border: none;
 }
 #btn:hover {
-  background-color: rgb(0, 0, 0);
+  background-color: #53dacf;
   color: white;
 }
 #checkbox{

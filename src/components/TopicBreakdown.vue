@@ -18,17 +18,7 @@
 <script>
 import { useStore } from "@/pinia/store";
 import StarRating from "./StarRating.vue";
-
-const colors = [
-  "#D3D3D3",
-  "#eddc99",
-  "#d3e25c",
-  "#a9c648",
-  "#81aa35",
-  "#5b8e23",
-  "#347311",
-  "#005800",
-];
+import { masteryColors } from "@/helpers";
 
 export default {
   components: { StarRating },
@@ -57,7 +47,7 @@ export default {
   },
   computed: {
     color() {
-        return colors[Math.floor(colors.length*this.topic.mastery)]
+        return masteryColors[Math.floor(masteryColors.length*this.topic.mastery)]
     }
   }
 };
