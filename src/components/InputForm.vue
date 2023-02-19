@@ -1,5 +1,5 @@
 <template>
-  <div id="wrapper">
+  <div class="sidebar">
     <form class="add-form">
       <div class="form-control">
         <label> Topic </label>
@@ -27,15 +27,16 @@
         <label> Link </label>
         <input type="text" v-model="link" name="link" placeholder="Add Link" />
       </div>
-      <div class="form-control">
+      <div v-if="!isProject" class="form-control">
         <label> Mastery Level </label>
         <input
-          type="number"
+          type="double"
           v-model="mastery"
           name="mastery"
           placeholder="Add Mastery Level"
         />
       </div>
+      <input id="checkbox" type="checkbox" v-model="isProject"> Is this a project?
       <button id="btn" @click.prevent="addNode">Add Node</button>
     </form>
   </div>
@@ -52,26 +53,30 @@ export default {
       mastery: null,
       category: "",
       store: useStore(),
-    };
+      isProject: false
+    }
   },
   methods: {
     addNode() {
-      if (!this.id ||this.mastery == null) {
+      if (this.isProject == true){
+        this.mastery = -1;
+      }
+      if (!this.id || this.mastery == null) {
         alert(
-          "Please input information for topic and mastery level "
+          "Please complete all input boxes!"
         );
         return;
       }
       if (!this.prereqs && !this.category) {
         alert(
-          "Please input information for either prerequisites or category"
+          "Please input information for prerequisites, category, or both"
         );
         return;
       }
-
-      if (this.mastery > 1 || this.mastery < 0) {
+      console.log(this.mastery)
+      if (!((this.mastery <= 1 && this.mastery >=0) || this.mastery==-1)) {
         alert(
-          "Please enter a mastery level that is greater than zero and less than one"
+          "Please input information for prerequisites, category, or both"
         );
         return;
       }
@@ -164,9 +169,9 @@ export default {
 </script>
 
 <style scoped>
-#wrapper {
+#sidebar {
   width: 300px;
-  height: auto;
+  height: 500px;
   display: flex;
   justify-content: center;
 }
@@ -199,5 +204,8 @@ export default {
 #btn:hover {
   background-color: rgb(0, 0, 0);
   color: white;
+}
+#checkbox{
+  margin-top: 8px;
 }
 </style>
